@@ -229,6 +229,21 @@ public class HologramManager {
             hologramsConfig.set(id + ".text_alignment", hologram.getTextAlignment().name());
             hologramsConfig.set(id + ".update_text_interval", hologram.getUpdateTextInterval());
             hologramsConfig.set(id + ".background", hologram.getBackground());
+            
+            // Save per-line scaling
+            List<Double> lineScaleX = new ArrayList<>();
+            List<Double> lineScaleY = new ArrayList<>();
+            List<Double> lineScaleZ = new ArrayList<>();
+            
+            for (int i = 0; i < hologram.getTextLines().size(); i++) {
+                lineScaleX.add((double) hologram.getLineScaleX(i));
+                lineScaleY.add((double) hologram.getLineScaleY(i));
+                lineScaleZ.add((double) hologram.getLineScaleZ(i));
+            }
+            
+            hologramsConfig.set(id + ".line_scale_x", lineScaleX);
+            hologramsConfig.set(id + ".line_scale_y", lineScaleY);
+            hologramsConfig.set(id + ".line_scale_z", lineScaleZ);
         }
         
         // Save billboard
