@@ -25,6 +25,9 @@ public class Hologram {
     private float translationX, translationY, translationZ;
     private float shadowRadius, shadowStrength;
     private List<String> textLines;
+    private List<Float> lineScaleX;  // Per-line scaling
+    private List<Float> lineScaleY;
+    private List<Float> lineScaleZ;
     private boolean textShadow;
     private boolean seeThrough;
     private TextAlignment textAlignment;
