@@ -1384,7 +1384,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         
         if (args.length == 1) {
             List<String> commands = Arrays.asList(
-                "create", "delete", "list", "info", "toggle", "clone", "near", "tp", "reload",
+                "create", "delete", "list", "info", "toggle", "clone", "near", "tp", "reload", "edit",
                 "moveHere", "position", "moveTo", "rotate", "rotatePitch", "visibilityDistance", 
                 "visibility", "scale", "billboard", "shadowStrength", "shadowRadius",
                 "setLine", "addLine", "removeLine", "insertBefore", "insertAfter", 
@@ -1399,7 +1399,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             String subCommand = args[0].toLowerCase();
             
             // Commands that need hologram names
-            if (Arrays.asList("delete", "info", "toggle", "clone", "tp", "movehere", "position", 
+            if (Arrays.asList("delete", "info", "toggle", "clone", "tp", "edit", "movehere", "position", 
                 "moveto", "rotate", "rotatepitch", "visibilitydistance", "visibility", "scale", 
                 "billboard", "shadowstrength", "shadowradius", "setline", "addline", "removeline", 
                 "insertbefore", "insertafter", "updatetextinterval", "background", "textshadow", 
@@ -1426,6 +1426,19 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                     .collect(Collectors.toList());
             }
             
+            // Edit command completions
+            if ("edit".equals(subCommand)) {
+                List<String> editCommands = Arrays.asList(
+                    "moveHere", "moveTo", "rotate", "rotatePitch", "visibilityDistance", "visibility",
+                    "scale", "billboard", "shadowStrength", "shadowRadius", "setLine", "addLine",
+                    "removeLine", "insertBefore", "insertAfter", "updateTextInterval", "background",
+                    "textShadow", "textAlignment", "clearText"
+                );
+                return editCommands.stream()
+                    .filter(cmd -> cmd.toLowerCase().startsWith(args[2].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
             if ("visibility".equals(subCommand)) {
                 return Arrays.asList("ALL", "MANUAL", "PERMISSION_NEEDED").stream()
                     .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
@@ -1448,6 +1461,42 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                 return Arrays.asList("center", "left", "right").stream()
                     .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
                     .collect(Collectors.toList());
+            }
+            
+            if ("background".equals(subCommand)) {
+                return ColorUtils.getColorSuggestions(args[2]);
+            }
+        }
+        
+        if (args.length == 4 && "edit".equals(args[0].toLowerCase())) {
+            String editCommand = args[2].toLowerCase();
+            
+            if ("visibility".equals(editCommand)) {
+                return Arrays.asList("ALL", "MANUAL", "PERMISSION_NEEDED").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("billboard".equals(editCommand)) {
+                return Arrays.asList("center", "fixed", "vertical", "horizontal").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("textshadow".equals(editCommand)) {
+                return Arrays.asList("true", "false").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("textalignment".equals(editCommand)) {
+                return Arrays.asList("center", "left", "right").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("background".equals(editCommand)) {
+                return ColorUtils.getColorSuggestions(args[3]);
             }
         }
         
