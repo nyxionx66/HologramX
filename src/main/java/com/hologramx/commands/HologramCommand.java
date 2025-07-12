@@ -348,6 +348,12 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         player.sendMessage("§e/hx edit <name> textShadow <true|false> §7- Text shadow");
         player.sendMessage("§e/hx edit <name> textAlignment <type> §7- Text alignment");
         player.sendMessage("§e/hx edit <name> updateTextInterval <time> §7- Auto-refresh");
+        
+        player.sendMessage("§e§lLine-Specific Scaling:");
+        player.sendMessage("§e/hx edit <name> lineScale <line> <factor> §7- Scale specific line");
+        player.sendMessage("§e/hx edit <name> lineScaleX <line> <factor> §7- Scale line X-axis");
+        player.sendMessage("§e/hx edit <name> lineScaleY <line> <factor> §7- Scale line Y-axis");
+        player.sendMessage("§e/hx edit <name> lineScaleZ <line> <factor> §7- Scale line Z-axis");
     }
     
     private void handleMoveHere(CommandSender sender, String[] args) {
