@@ -304,7 +304,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "textalignment" -> handleTextAlignment(sender, editArgs);
             case "cleartext" -> {
                 if (hologram.getType() == Hologram.HologramType.TEXT) {
-                    hologram.getTextLines().clear();
+                    hologram.clearTextLines();
                     hologram.despawn();
                     hologram.spawn();
                     player.sendMessage("§aCleared all text lines for hologram '" + hologramName + "'.");
@@ -312,6 +312,12 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage("§cThis command only works with text holograms!");
                 }
             }
+            
+            // Line-specific scaling commands
+            case "linescale" -> handleLineScale(sender, editArgs);
+            case "linescalex" -> handleLineScaleX(sender, editArgs);
+            case "linescaley" -> handleLineScaleY(sender, editArgs);
+            case "linescalez" -> handleLineScaleZ(sender, editArgs);
             
             default -> sendEditUsage(player);
         }
