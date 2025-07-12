@@ -69,6 +69,12 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "textshadow" -> handleTextShadow(sender, args);
             case "textalignment" -> handleTextAlignment(sender, args);
             
+            // Line-specific scaling commands
+            case "linescale" -> handleLineScale(sender, args);
+            case "linescalex" -> handleLineScaleX(sender, args);
+            case "linescaley" -> handleLineScaleY(sender, args);
+            case "linescalez" -> handleLineScaleZ(sender, args);
+            
             default -> sendUsage(sender);
         }
         
