@@ -3,6 +3,7 @@ package com.hologramx.commands;
 import com.hologramx.HologramX;
 import com.hologramx.holograms.Hologram;
 import com.hologramx.utils.LocationUtils;
+import com.hologramx.utils.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
