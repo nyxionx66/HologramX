@@ -312,7 +312,78 @@ public class Hologram {
                System.currentTimeMillis() - lastUpdate >= updateTextInterval * 50L;
     }
     
-    // Getters and setters
+    // Helper methods for per-line scaling
+    public float getLineScaleX(int lineIndex) {
+        if (lineIndex >= 0 && lineIndex < lineScaleX.size()) {
+            return lineScaleX.get(lineIndex);
+        }
+        return 1.0f;
+    }
+    
+    public float getLineScaleY(int lineIndex) {
+        if (lineIndex >= 0 && lineIndex < lineScaleY.size()) {
+            return lineScaleY.get(lineIndex);
+        }
+        return 1.0f;
+    }
+    
+    public float getLineScaleZ(int lineIndex) {
+        if (lineIndex >= 0 && lineIndex < lineScaleZ.size()) {
+            return lineScaleZ.get(lineIndex);
+        }
+        return 1.0f;
+    }
+    
+    public void setLineScale(int lineIndex, float scaleX, float scaleY, float scaleZ) {
+        ensureLineScaleSize(lineIndex + 1);
+        if (lineIndex >= 0) {
+            lineScaleX.set(lineIndex, scaleX);
+            lineScaleY.set(lineIndex, scaleY);
+            lineScaleZ.set(lineIndex, scaleZ);
+        }
+    }
+    
+    public void setLineScaleUniform(int lineIndex, float scale) {
+        setLineScale(lineIndex, scale, scale, scale);
+    }
+    
+    private void ensureLineScaleSize(int size) {
+        while (lineScaleX.size() < size) {
+            lineScaleX.add(1.0f);
+            lineScaleY.add(1.0f);
+            lineScaleZ.add(1.0f);
+        }
+    }
+    
+    public void addTextLine(String text) {
+        textLines.add(text);
+        ensureLineScaleSize(textLines.size());
+    }
+    
+    public void insertTextLine(int index, String text) {
+        textLines.add(index, text);
+        lineScaleX.add(index, 1.0f);
+        lineScaleY.add(index, 1.0f);
+        lineScaleZ.add(index, 1.0f);
+    }
+    
+    public void removeTextLine(int index) {
+        if (index >= 0 && index < textLines.size()) {
+            textLines.remove(index);
+            if (index < lineScaleX.size()) {
+                lineScaleX.remove(index);
+                lineScaleY.remove(index);
+                lineScaleZ.remove(index);
+            }
+        }
+    }
+    
+    public void clearTextLines() {
+        textLines.clear();
+        lineScaleX.clear();
+        lineScaleY.clear();
+        lineScaleZ.clear();
+    }
     public String getId() { return id; }
     public HologramType getType() { return type; }
     public void setType(HologramType type) { this.type = type; }
