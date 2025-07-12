@@ -1289,8 +1289,13 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
         
         if (args.length == 1) {
-            List<String> commands = Arrays.asList("create", "delete", "list", "info", 
-                "move", "toggle", "clone", "near", "tp", "text", "reload");
+            List<String> commands = Arrays.asList(
+                "create", "delete", "list", "info", "toggle", "clone", "near", "tp", "reload",
+                "moveHere", "position", "moveTo", "rotate", "rotatePitch", "visibilityDistance", 
+                "visibility", "scale", "billboard", "shadowStrength", "shadowRadius",
+                "setLine", "addLine", "removeLine", "insertBefore", "insertAfter", 
+                "updateTextInterval", "background", "textShadow", "textAlignment"
+            );
             return commands.stream()
                 .filter(cmd -> cmd.toLowerCase().startsWith(args[0].toLowerCase()))
                 .collect(Collectors.toList());
@@ -1299,7 +1304,12 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         if (args.length == 2) {
             String subCommand = args[0].toLowerCase();
             
-            if (Arrays.asList("delete", "info", "move", "toggle", "clone", "tp", "text").contains(subCommand)) {
+            // Commands that need hologram names
+            if (Arrays.asList("delete", "info", "toggle", "clone", "tp", "movehere", "position", 
+                "moveto", "rotate", "rotatepitch", "visibilitydistance", "visibility", "scale", 
+                "billboard", "shadowstrength", "shadowradius", "setline", "addline", "removeline", 
+                "insertbefore", "insertafter", "updatetextinterval", "background", "textshadow", 
+                "textalignment").contains(subCommand)) {
                 return plugin.getHologramManager().getHolograms().stream()
                     .map(Hologram::getId)
                     .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
@@ -1314,15 +1324,35 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         }
         
         if (args.length == 3) {
-            if ("create".equals(args[0].toLowerCase())) {
+            String subCommand = args[0].toLowerCase();
+            
+            if ("create".equals(subCommand)) {
                 return Arrays.asList("TEXT", "ITEM", "BLOCK").stream()
                     .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
                     .collect(Collectors.toList());
             }
             
-            if ("text".equals(args[0].toLowerCase())) {
-                return Arrays.asList("add", "remove", "set", "clear").stream()
-                    .filter(action -> action.toLowerCase().startsWith(args[2].toLowerCase()))
+            if ("visibility".equals(subCommand)) {
+                return Arrays.asList("ALL", "MANUAL", "PERMISSION_NEEDED").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("billboard".equals(subCommand)) {
+                return Arrays.asList("center", "fixed", "vertical", "horizontal").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("textshadow".equals(subCommand)) {
+                return Arrays.asList("true", "false").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            
+            if ("textalignment".equals(subCommand)) {
+                return Arrays.asList("center", "left", "right").stream()
+                    .filter(type -> type.toLowerCase().startsWith(args[2].toLowerCase()))
                     .collect(Collectors.toList());
             }
         }
