@@ -1222,7 +1222,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         }
         
         String name = args[1];
-        String color = args[2];
+        String colorInput = args[2];
         
         Hologram hologram = plugin.getHologramManager().getHologram(name);
         
@@ -1236,12 +1236,20 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             return;
         }
         
-        hologram.setBackground(color);
+        String parsedColor = ColorUtils.parseColor(colorInput);
+        if (parsedColor == null) {
+            player.sendMessage("§cInvalid color format! Use: transparent, color names, #RRGGBB, or rgb(r,g,b)");
+            player.sendMessage("§7Examples: transparent, red, #FF0000, rgb(255,0,0)");
+            return;
+        }
+        
+        hologram.setBackground(parsedColor);
         
         hologram.despawn();
         hologram.spawn();
         
-        player.sendMessage("§aSet background color for hologram '" + name + "' to " + color + ".");
+        String displayColor = ColorUtils.formatColorForDisplay(parsedColor);
+        player.sendMessage("§aSet background color for hologram '" + name + "' to " + displayColor + ".");
     }
     
     private void handleTextShadow(CommandSender sender, String[] args) {
