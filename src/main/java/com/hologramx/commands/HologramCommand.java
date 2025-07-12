@@ -1351,6 +1351,128 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         }
     }
     
+    // Line-specific scaling commands
+    
+    private void handleLineScale(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 4) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx lineScale <name> <line> <factor>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int lineNumber = Integer.parseInt(args[2]) - 1;
+            float scale = Float.parseFloat(args[3]);
+            
+            if (lineNumber >= 0 && lineNumber < hologram.getTextLines().size()) {
+                hologram.setLineScaleUniform(lineNumber, scale);
+                
+                hologram.despawn();
+                hologram.spawn();
+                
+                player.sendMessage("§aSet scale for line " + (lineNumber + 1) + " of hologram '" + name + "' to " + scale + ".");
+            } else {
+                plugin.getMessages().sendMessage(player, "text-line-invalid", 
+                    "max", String.valueOf(hologram.getTextLines().size()));
+            }
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", "line or scale");
+        }
+    }
+    
+    private void handleLineScaleX(CommandSender sender, String[] args) {
+        handleLineScaleAxis(sender, args, "X");
+    }
+    
+    private void handleLineScaleY(CommandSender sender, String[] args) {
+        handleLineScaleAxis(sender, args, "Y");
+    }
+    
+    private void handleLineScaleZ(CommandSender sender, String[] args) {
+        handleLineScaleAxis(sender, args, "Z");
+    }
+    
+    private void handleLineScaleAxis(CommandSender sender, String[] args, String axis) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 4) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx lineScale" + axis + " <name> <line> <factor>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int lineNumber = Integer.parseInt(args[2]) - 1;
+            float scale = Float.parseFloat(args[3]);
+            
+            if (lineNumber >= 0 && lineNumber < hologram.getTextLines().size()) {
+                float currentX = hologram.getLineScaleX(lineNumber);
+                float currentY = hologram.getLineScaleY(lineNumber);
+                float currentZ = hologram.getLineScaleZ(lineNumber);
+                
+                switch (axis) {
+                    case "X" -> hologram.setLineScale(lineNumber, scale, currentY, currentZ);
+                    case "Y" -> hologram.setLineScale(lineNumber, currentX, scale, currentZ);
+                    case "Z" -> hologram.setLineScale(lineNumber, currentX, currentY, scale);
+                }
+                
+                hologram.despawn();
+                hologram.spawn();
+                
+                player.sendMessage("§aSet " + axis + "-scale for line " + (lineNumber + 1) + " of hologram '" + name + "' to " + scale + ".");
+            } else {
+                plugin.getMessages().sendMessage(player, "text-line-invalid", 
+                    "max", String.valueOf(hologram.getTextLines().size()));
+            }
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", "line or scale");
+        }
+    }
+    
     private void handleReload(CommandSender sender, String[] args) {
         if (!sender.hasPermission("hologramx.reload")) {
             if (sender instanceof Player player) {
