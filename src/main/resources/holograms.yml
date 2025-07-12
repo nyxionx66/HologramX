@@ -104,3 +104,68 @@ player_stats:
   update_text_interval: 20
   background: "#40000000"
   billboard: vertical
+
+# Additional examples demonstrating color features
+
+rgb_example:
+  type: TEXT
+  location:
+    world: world
+    x: 20.5
+    y: 70.0
+    z: 10.5
+    yaw: 0.0
+    pitch: 0.0
+  visibility_distance: 40
+  visibility: ALL
+  persistent: true
+  scale_x: 1.2
+  scale_y: 1.2
+  scale_z: 1.2
+  translation_x: 0.0
+  translation_y: 0.0
+  translation_z: 0.0
+  shadow_radius: 0.5
+  shadow_strength: 0.8
+  text:
+    - "<gradient:#FF0000:#00FF00>RGB Color Demo</gradient>"
+    - "<white>This hologram uses RGB background</white>"
+    - "<yellow>Background: rgb(64, 128, 255)</yellow>"
+  text_shadow: true
+  see_through: false
+  text_alignment: center
+  update_text_interval: -1
+  background: "rgb(64,128,255)"
+  billboard: vertical
+
+named_colors_example:
+  type: TEXT
+  location:
+    world: world
+    x: -20.5
+    y: 70.0
+    z: -10.5
+    yaw: 90.0
+    pitch: 0.0
+  visibility_distance: 35
+  visibility: ALL
+  persistent: true
+  scale_x: 1.0
+  scale_y: 1.0
+  scale_z: 1.0
+  translation_x: 0.0
+  translation_y: 0.0
+  translation_z: 0.0
+  shadow_radius: 0.0
+  shadow_strength: 1.0
+  text:
+    - "<bold><dark_red>Named Colors Demo</dark_red></bold>"
+    - "<white>Background uses named color</white>"
+    - "<gray>Try: red, blue, green, purple</gray>"
+    - "<yellow>Or: dark_red, light_blue, etc.</yellow>"
+  text_shadow: false
+  see_through: false
+  text_alignment: center
+  update_text_interval: -1
+  background: "dark_blue"
+  billboard: fixed
