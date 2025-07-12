@@ -33,17 +33,40 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         String subCommand = args[0].toLowerCase();
         
         switch (subCommand) {
+            // Basic commands
             case "create" -> handleCreate(sender, args);
             case "delete" -> handleDelete(sender, args);
             case "list" -> handleList(sender, args);
             case "info" -> handleInfo(sender, args);
-            case "move" -> handleMove(sender, args);
             case "toggle" -> handleToggle(sender, args);
             case "clone" -> handleClone(sender, args);
             case "near" -> handleNear(sender, args);
             case "tp", "teleport" -> handleTeleport(sender, args);
-            case "text" -> handleText(sender, args);
             case "reload" -> handleReload(sender, args);
+            
+            // General hologram properties
+            case "movehere", "position" -> handleMoveHere(sender, args);
+            case "moveto" -> handleMoveTo(sender, args);
+            case "rotate" -> handleRotate(sender, args);
+            case "rotatepitch" -> handleRotatePitch(sender, args);
+            case "visibilitydistance" -> handleVisibilityDistance(sender, args);
+            case "visibility" -> handleVisibility(sender, args);
+            case "scale" -> handleScale(sender, args);
+            case "billboard" -> handleBillboard(sender, args);
+            case "shadowstrength" -> handleShadowStrength(sender, args);
+            case "shadowradius" -> handleShadowRadius(sender, args);
+            
+            // Text hologram commands
+            case "setline" -> handleSetLine(sender, args);
+            case "addline" -> handleAddLine(sender, args);
+            case "removeline" -> handleRemoveLine(sender, args);
+            case "insertbefore" -> handleInsertBefore(sender, args);
+            case "insertafter" -> handleInsertAfter(sender, args);
+            case "updatetextinterval" -> handleUpdateTextInterval(sender, args);
+            case "background" -> handleBackground(sender, args);
+            case "textshadow" -> handleTextShadow(sender, args);
+            case "textalignment" -> handleTextAlignment(sender, args);
+            
             default -> sendUsage(sender);
         }
         
