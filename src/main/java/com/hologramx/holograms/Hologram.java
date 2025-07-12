@@ -90,16 +90,72 @@ public class Hologram {
             Component component = MiniMessage.miniMessage().deserialize(text);
             display.text(component);
             
-            // Apply display settings
-            applyDisplaySettings(display);
+            // Apply display settings with per-line scaling
+            applyDisplaySettings(display, i);
             
-            // Set position with line spacing
-            double lineSpacing = 0.25;
+            // Set position with responsive line spacing based on scaling
+            double baseLineSpacing = 0.25;
+            double scaledSpacing = baseLineSpacing * Math.max(scaleY, getLineScaleY(i));
+            
             Location lineLocation = spawnLoc.clone();
-            lineLocation.add(0, -i * lineSpacing, 0);
+            lineLocation.add(0, -i * scaledSpacing, 0);
             display.teleport(lineLocation);
             
             displayEntities.add(display);
+        }
+    }
+    
+    private void applyDisplaySettings(TextDisplay display, int lineIndex) {
+        // Set billboard
+        switch (billboard) {
+            case FIXED -> display.setBillboard(Display.Billboard.FIXED);
+            case VERTICAL -> display.setBillboard(Display.Billboard.VERTICAL);
+            case HORIZONTAL -> display.setBillboard(Display.Billboard.HORIZONTAL);
+            case CENTER -> display.setBillboard(Display.Billboard.CENTER);
+        }
+        
+        // Set text alignment
+        switch (textAlignment) {
+            case LEFT -> display.setAlignment(TextDisplay.TextAlignment.LEFT);
+            case CENTER -> display.setAlignment(TextDisplay.TextAlignment.CENTER);
+            case RIGHT -> display.setAlignment(TextDisplay.TextAlignment.RIGHT);
+        }
+        
+        // Set background
+        if (!"transparent".equals(background)) {
+            try {
+                int color = com.hologramx.utils.ColorUtils.hexToARGB(background);
+                display.setBackgroundColor(org.bukkit.Color.fromARGB(color));
+            } catch (Exception e) {
+                // Use transparent if invalid color
+                display.setBackgroundColor(org.bukkit.Color.fromARGB(0));
+            }
+        } else {
+            display.setBackgroundColor(org.bukkit.Color.fromARGB(0));
+        }
+        
+        // Set text properties
+        display.setShadowed(textShadow);
+        display.setSeeThrough(seeThrough);
+        
+        // Set transformation with per-line scaling
+        float finalScaleX = scaleX * getLineScaleX(lineIndex);
+        float finalScaleY = scaleY * getLineScaleY(lineIndex);
+        float finalScaleZ = scaleZ * getLineScaleZ(lineIndex);
+        
+        Vector3f scale = new Vector3f(finalScaleX, finalScaleY, finalScaleZ);
+        Vector3f translation = new Vector3f(translationX, translationY, translationZ);
+        Transformation transformation = new Transformation(translation, 
+            new org.joml.Quaternionf(), scale, new org.joml.Quaternionf());
+        display.setTransformation(transformation);
+        
+        // Set shadow
+        display.setShadowRadius(shadowRadius);
+        display.setShadowStrength(shadowStrength);
+        
+        // Set view range
+        if (visibilityDistance > 0) {
+            display.setViewRange(visibilityDistance / 16.0f);
         }
     }
     
