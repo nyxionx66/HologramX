@@ -1600,6 +1600,29 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             if ("background".equals(subCommand)) {
                 return ColorUtils.getColorSuggestions(args[2]);
             }
+            
+            // Line number completions for line-specific commands
+            if (Arrays.asList("setline", "removeline", "insertbefore", "insertafter", 
+                "linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
+                Hologram hologram = plugin.getHologramManager().getHologram(args[1]);
+                if (hologram != null && hologram.getType() == Hologram.HologramType.TEXT) {
+                    List<String> lineNumbers = new ArrayList<>();
+                    int maxLines = hologram.getTextLines().size();
+                    
+                    if ("insertbefore".equals(subCommand) || "insertafter".equals(subCommand)) {
+                        // For insert commands, allow one more than current lines
+                        maxLines++;
+                    }
+                    
+                    for (int i = 1; i <= maxLines; i++) {
+                        String lineNum = String.valueOf(i);
+                        if (lineNum.startsWith(args[2])) {
+                            lineNumbers.add(lineNum);
+                        }
+                    }
+                    return lineNumbers;
+                }
+            }
         }
         
         if (args.length == 4 && "edit".equals(args[0].toLowerCase())) {
