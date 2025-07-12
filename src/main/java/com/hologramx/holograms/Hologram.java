@@ -52,6 +52,9 @@ public class Hologram {
         this.shadowRadius = 0.0f;
         this.shadowStrength = 1.0f;
         this.textLines = new ArrayList<>();
+        this.lineScaleX = new ArrayList<>();
+        this.lineScaleY = new ArrayList<>();
+        this.lineScaleZ = new ArrayList<>();
         this.textShadow = false;
         this.seeThrough = false;
         this.textAlignment = TextAlignment.CENTER;
