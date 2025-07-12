@@ -1044,7 +1044,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             int lineNumber = Integer.parseInt(args[2]) - 1;
             
             if (lineNumber >= 0 && lineNumber < hologram.getTextLines().size()) {
-                hologram.getTextLines().remove(lineNumber);
+                hologram.removeTextLine(lineNumber);
                 
                 hologram.despawn();
                 hologram.spawn();
