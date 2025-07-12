@@ -143,6 +143,20 @@ public class HologramManager {
             
             hologram.setUpdateTextInterval(section.getInt("update_text_interval", -1));
             hologram.setBackground(section.getString("background", "transparent"));
+            
+            // Load per-line scaling if present
+            List<Double> lineScaleX = section.getDoubleList("line_scale_x");
+            List<Double> lineScaleY = section.getDoubleList("line_scale_y");
+            List<Double> lineScaleZ = section.getDoubleList("line_scale_z");
+            
+            if (!lineScaleX.isEmpty() && !lineScaleY.isEmpty() && !lineScaleZ.isEmpty()) {
+                for (int i = 0; i < Math.min(textLines.size(), Math.min(lineScaleX.size(), Math.min(lineScaleY.size(), lineScaleZ.size()))); i++) {
+                    hologram.setLineScale(i, 
+                        lineScaleX.get(i).floatValue(),
+                        lineScaleY.get(i).floatValue(),
+                        lineScaleZ.get(i).floatValue());
+                }
+            }
         }
         
         // Load billboard
