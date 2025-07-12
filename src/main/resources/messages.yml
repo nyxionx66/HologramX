@@ -1,0 +1,69 @@
+# HologramX Messages
+# Use MiniMessage format for rich text
+
+prefix: "<gray>[<gradient:#FFD700:#FFA500>HologramX</gradient>]</gray> "
+
+# General Messages
+no-permission: "<red>You don't have permission to use this command!</red>"
+player-only: "<red>This command can only be used by players!</red>"
+invalid-syntax: "<red>Invalid syntax! Use: <yellow>{usage}</yellow></red>"
+plugin-reloaded: "<green>HologramX has been reloaded successfully!</green>"
+
+# Hologram Messages
+hologram-created: "<green>Hologram '<yellow>{name}</yellow>' created successfully!</green>"
+hologram-deleted: "<green>Hologram '<yellow>{name}</yellow>' deleted successfully!</green>"
+hologram-not-found: "<red>Hologram '<yellow>{name}</yellow>' not found!</red>"
+hologram-already-exists: "<red>Hologram '<yellow>{name}</yellow>' already exists!</red>"
+hologram-moved: "<green>Hologram '<yellow>{name}</yellow>' moved to your location!</green>"
+hologram-toggled: "<green>Hologram '<yellow>{name}</yellow>' visibility toggled!</green>"
+hologram-cloned: "<green>Hologram '<yellow>{name}</yellow>' cloned as '<yellow>{new_name}</yellow>'!</green>"
+hologram-teleported: "<green>Teleported to hologram '<yellow>{name}</yellow>'!</green>"
+
+# Text Hologram Messages
+text-line-added: "<green>Text line added to hologram '<yellow>{name}</yellow>'!</green>"
+text-line-removed: "<green>Text line <yellow>{line}</yellow> removed from hologram '<yellow>{name}</yellow>'!</green>"
+text-line-set: "<green>Text line <yellow>{line}</yellow> set for hologram '<yellow>{name}</yellow>'!</green>"
+text-line-inserted: "<green>Text line inserted at position <yellow>{line}</yellow> for hologram '<yellow>{name}</yellow>'!</green>"
+text-cleared: "<green>All text lines cleared for hologram '<yellow>{name}</yellow>'!</green>"
+text-line-invalid: "<red>Invalid line number! Valid range: <yellow>1-{max}</yellow></red>"
+
+# List Messages
+hologram-list-header: "<yellow>Holograms (Page {page}/{max_pages}):</yellow>"
+hologram-list-entry: "<gray>- <yellow>{name}</yellow> <gray>(<white>{type}</white>) - <green>{world}</green> <gray>({x}, {y}, {z})</gray>"
+hologram-list-empty: "<red>No holograms found!</red>"
+
+# Info Messages
+hologram-info-header: "<yellow>Hologram Info: <white>{name}</white></yellow>"
+hologram-info-type: "<gray>Type: <white>{type}</white></gray>"
+hologram-info-location: "<gray>Location: <white>{world}</white> <gray>({x}, {y}, {z})</gray>"
+hologram-info-visibility: "<gray>Visibility: <white>{visibility}</white></gray>"
+hologram-info-distance: "<gray>View Distance: <white>{distance}</white></gray>"
+hologram-info-scale: "<gray>Scale: <white>{scale_x}, {scale_y}, {scale_z}</white></gray>"
+hologram-info-translation: "<gray>Translation: <white>{translation_x}, {translation_y}, {translation_z}</white></gray>"
+hologram-info-persistent: "<gray>Persistent: <white>{persistent}</white></gray>"
+
+# Animation Messages
+animation-applied: "<green>Animation '<yellow>{animation}</yellow>' applied to hologram '<yellow>{name}</yellow>'!</green>"
+animation-stopped: "<green>Animation stopped for hologram '<yellow>{name}</yellow>'!</green>"
+animation-not-found: "<red>Animation '<yellow>{animation}</yellow>' not found!</red>"
+animation-speed-set: "<green>Animation speed set to <yellow>{speed}</yellow> for hologram '<yellow>{name}</yellow>'!</green>"
+
+# Error Messages
+error-loading-hologram: "<red>Error loading hologram '<yellow>{name}</yellow>': {error}</red>"
+error-saving-hologram: "<red>Error saving hologram '<yellow>{name}</yellow>': {error}</red>"
+error-invalid-location: "<red>Invalid location specified!</red>"
+error-invalid-world: "<red>World '<yellow>{world}</yellow>' not found!</red>"
+error-invalid-number: "<red>Invalid number: <yellow>{value}</yellow></red>"
+error-invalid-material: "<red>Invalid material: <yellow>{material}</yellow></red>"
+error-invalid-color: "<red>Invalid color: <yellow>{color}</yellow></red>"
+
+# Success Messages
+backup-created: "<green>Backup created successfully!</green>"
+backup-restored: "<green>Backup restored successfully!</green>"
+holograms-imported: "<green>Imported <yellow>{count}</yellow> holograms from <yellow>{file}</yellow>!</green>"
+holograms-exported: "<green>Exported <yellow>{count}</yellow> holograms to <yellow>{file}</yellow>!</green>"
+
+# Near Messages
+near-header: "<yellow>Nearby holograms (within {distance} blocks):</yellow>"
+near-entry: "<gray>- <yellow>{name}</yellow> <gray>(<white>{distance}</white> blocks away)</gray>"
+near-empty: "<red>No holograms found nearby!</red>"

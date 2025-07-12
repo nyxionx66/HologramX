@@ -1,0 +1,119 @@
+# HologramX Configuration
+# Advanced hologram plugin for Paper 1.21+ using display entities
+
+# Database Configuration
+database:
+  # Storage type: YAML or MYSQL
+  type: YAML
+  
+  # MySQL settings (only used if type is MYSQL)
+  mysql:
+    host: localhost
+    port: 3306
+    database: hologramx
+    username: root
+    password: password
+    properties:
+      useSSL: false
+      autoReconnect: true
+      characterEncoding: utf8
+      
+# Performance Settings
+performance:
+  # View distance for holograms (-1 for unlimited)
+  view-distance: 64
+  
+  # Update interval for dynamic content (in ticks)
+  update-interval: 20
+  
+  # Enable chunk-based loading
+  chunk-loading: true
+  
+  # Enable async operations
+  async-operations: true
+  
+  # Maximum holograms per chunk
+  max-per-chunk: 50
+
+# Default Display Settings
+defaults:
+  # Default billboard mode: fixed, vertical, horizontal, center
+  billboard: vertical
+  
+  # Default text alignment: left, center, right
+  text-alignment: center
+  
+  # Default scaling
+  scale:
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    
+  # Default translation
+  translation:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    
+  # Default shadow settings
+  shadow:
+    radius: 0.0
+    strength: 1.0
+    
+  # Default visibility settings
+  visibility:
+    distance: -1
+    type: ALL
+    
+  # Default background
+  background: transparent
+  
+  # Default text shadow
+  text-shadow: false
+  
+  # Default see-through
+  see-through: false
+
+# PlaceholderAPI Integration
+placeholders:
+  # Enable PlaceholderAPI integration
+  enabled: true
+  
+  # Update interval for placeholders (in ticks)
+  update-interval: 20
+  
+  # Cache placeholder results
+  cache-enabled: true
+  
+  # Cache duration (in seconds)
+  cache-duration: 30
+
+# Animation Settings
+animations:
+  # Enable animation system
+  enabled: true
+  
+  # Maximum animations per hologram
+  max-per-hologram: 5
+  
+  # Animation update rate (in ticks)
+  update-rate: 2
+
+# Backup Settings
+backup:
+  # Enable automatic backups
+  enabled: true
+  
+  # Backup interval (in hours)
+  interval: 24
+  
+  # Maximum backup files to keep
+  max-files: 7
+
+# Debug Settings
+debug:
+  # Enable debug mode
+  enabled: false
+  
+  # Log performance metrics
+  performance-logging: false
