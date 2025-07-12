@@ -11,6 +11,61 @@ Advanced hologram plugin for Minecraft Paper 1.21+ servers using display entitie
 - **PlaceholderAPI Integration**: Dynamic content with placeholder support
 - **Advanced Visibility System**: Permission-based, world-based, and distance-based visibility
 
+## Advanced Features
+
+### 🎨 **Color System**
+- **Named Colors**: red, blue, green, yellow, purple, orange, pink, cyan, etc.
+- **Extended Names**: dark_red, light_blue, dark_purple, light_gray, etc.
+- **Hex Colors**: #FF0000, #00FF00, #0000FF, #AARRGGBB (with alpha)
+- **RGB Format**: rgb(255,0,0), rgb(0,255,0), rgb(0,0,255)
+- **Transparency**: transparent keyword for no background
+- **Tab Completion**: Smart suggestions for all color formats
+
+### 📝 **Command Examples**
+
+#### Color Usage Examples
+```bash
+# Named colors
+/hx edit welcomeServer background red
+/hx edit welcomeServer background dark_blue
+
+# Hex colors
+/hx edit welcomeServer background #FF0000
+/hx edit welcomeServer background #80FF0000  # Semi-transparent red
+
+# RGB colors
+/hx edit welcomeServer background rgb(255,0,0)
+/hx edit welcomeServer background rgb(128,255,128)
+
+# Transparent background
+/hx edit welcomeServer background transparent
+```
+
+#### Edit Command Examples
+```bash
+# Position and rotation
+/hx edit myHolo moveHere
+/hx edit myHolo moveTo 100 64 200 90 0
+/hx edit myHolo rotate 45
+/hx edit myHolo scale 1.5
+
+# Text editing
+/hx edit myHolo addLine "<gold>New line of text</gold>"
+/hx edit myHolo setLine 1 "<red>Updated first line</red>"
+/hx edit myHolo insertAfter 2 "<blue>Inserted line</blue>"
+
+# Visual properties
+/hx edit myHolo background rgb(64,128,255)
+/hx edit myHolo textShadow true
+/hx edit myHolo billboard center
+/hx edit myHolo visibility PERMISSION_NEEDED
+
+# Auto-refresh for placeholders
+/hx edit myHolo updateTextInterval 20t    # 20 ticks
+/hx edit myHolo updateTextInterval 5s     # 5 seconds  
+/hx edit myHolo updateTextInterval 2m     # 2 minutes
+```
+
 ### 🎨 **Display Features**
 - **Scaling & Translation**: Precise control over hologram size and position
 - **Billboard Modes**: Fixed, vertical, horizontal, center alignment options
