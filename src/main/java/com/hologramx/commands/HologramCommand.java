@@ -44,7 +44,10 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "tp", "teleport" -> handleTeleport(sender, args);
             case "reload" -> handleReload(sender, args);
             
-            // General hologram properties
+            // Edit command (unified editing)
+            case "edit" -> handleEdit(sender, args);
+            
+            // Legacy direct commands (still supported)
             case "movehere", "position" -> handleMoveHere(sender, args);
             case "moveto" -> handleMoveTo(sender, args);
             case "rotate" -> handleRotate(sender, args);
@@ -55,8 +58,6 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "billboard" -> handleBillboard(sender, args);
             case "shadowstrength" -> handleShadowStrength(sender, args);
             case "shadowradius" -> handleShadowRadius(sender, args);
-            
-            // Text hologram commands
             case "setline" -> handleSetLine(sender, args);
             case "addline" -> handleAddLine(sender, args);
             case "removeline" -> handleRemoveLine(sender, args);
