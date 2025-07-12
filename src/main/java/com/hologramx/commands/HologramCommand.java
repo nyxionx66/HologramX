@@ -245,7 +245,103 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             "persistent", String.valueOf(hologram.isPersistent()));
     }
     
-    // General Hologram Property Commands
+    // Unified Edit Command
+    
+    private void handleEdit(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            sendEditUsage(player);
+            return;
+        }
+        
+        String hologramName = args[1];
+        String editCommand = args[2].toLowerCase();
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(hologramName);
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", hologramName);
+            return;
+        }
+        
+        // Create new args array for the edit subcommand
+        String[] editArgs = new String[args.length - 1];
+        editArgs[0] = editCommand;
+        editArgs[1] = hologramName;
+        System.arraycopy(args, 3, editArgs, 2, args.length - 3);
+        
+        switch (editCommand) {
+            // General properties
+            case "movehere", "position" -> handleMoveHere(sender, editArgs);
+            case "moveto" -> handleMoveTo(sender, editArgs);
+            case "rotate" -> handleRotate(sender, editArgs);
+            case "rotatepitch" -> handleRotatePitch(sender, editArgs);
+            case "visibilitydistance" -> handleVisibilityDistance(sender, editArgs);
+            case "visibility" -> handleVisibility(sender, editArgs);
+            case "scale" -> handleScale(sender, editArgs);
+            case "billboard" -> handleBillboard(sender, editArgs);
+            case "shadowstrength" -> handleShadowStrength(sender, editArgs);
+            case "shadowradius" -> handleShadowRadius(sender, editArgs);
+            
+            // Text commands
+            case "setline" -> handleSetLine(sender, editArgs);
+            case "addline" -> handleAddLine(sender, editArgs);
+            case "removeline" -> handleRemoveLine(sender, editArgs);
+            case "insertbefore" -> handleInsertBefore(sender, editArgs);
+            case "insertafter" -> handleInsertAfter(sender, editArgs);
+            case "updatetextinterval" -> handleUpdateTextInterval(sender, editArgs);
+            case "background" -> handleBackground(sender, editArgs);
+            case "textshadow" -> handleTextShadow(sender, editArgs);
+            case "textalignment" -> handleTextAlignment(sender, editArgs);
+            case "cleartext" -> {
+                if (hologram.getType() == Hologram.HologramType.TEXT) {
+                    hologram.getTextLines().clear();
+                    hologram.despawn();
+                    hologram.spawn();
+                    player.sendMessage("§aCleared all text lines for hologram '" + hologramName + "'.");
+                } else {
+                    player.sendMessage("§cThis command only works with text holograms!");
+                }
+            }
+            
+            default -> sendEditUsage(player);
+        }
+    }
+    
+    private void sendEditUsage(Player player) {
+        player.sendMessage("§6Edit Hologram Commands:");
+        player.sendMessage("§e§lGeneral Properties:");
+        player.sendMessage("§e/hx edit <name> moveHere §7- Move to your location");
+        player.sendMessage("§e/hx edit <name> moveTo <x> <y> <z> [yaw] [pitch] §7- Set position");
+        player.sendMessage("§e/hx edit <name> rotate <degrees> §7- Rotate Y-axis");
+        player.sendMessage("§e/hx edit <name> rotatePitch <degrees> §7- Rotate X-axis");
+        player.sendMessage("§e/hx edit <name> visibilityDistance <distance> §7- Set view distance");
+        player.sendMessage("§e/hx edit <name> visibility <type> §7- Set visibility");
+        player.sendMessage("§e/hx edit <name> scale <factor> §7- Resize");
+        player.sendMessage("§e/hx edit <name> billboard <type> §7- Set orientation");
+        player.sendMessage("§e/hx edit <name> shadowStrength <value> §7- Shadow quality");
+        player.sendMessage("§e/hx edit <name> shadowRadius <radius> §7- Shadow spread");
+        
+        player.sendMessage("§e§lText Properties:");
+        player.sendMessage("§e/hx edit <name> setLine <line> <text...> §7- Replace line");
+        player.sendMessage("§e/hx edit <name> addLine <text...> §7- Add line");
+        player.sendMessage("§e/hx edit <name> removeLine <line> §7- Remove line");
+        player.sendMessage("§e/hx edit <name> insertBefore <line> <text...> §7- Insert above");
+        player.sendMessage("§e/hx edit <name> insertAfter <line> <text...> §7- Insert below");
+        player.sendMessage("§e/hx edit <name> clearText §7- Clear all text");
+        player.sendMessage("§e/hx edit <name> background <color> §7- Background color");
+        player.sendMessage("§e/hx edit <name> textShadow <true|false> §7- Text shadow");
+        player.sendMessage("§e/hx edit <name> textAlignment <type> §7- Text alignment");
+        player.sendMessage("§e/hx edit <name> updateTextInterval <time> §7- Auto-refresh");
+    }
     
     private void handleMoveHere(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
