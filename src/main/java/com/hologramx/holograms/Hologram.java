@@ -116,9 +116,9 @@ public class Hologram {
         // Set background
         if (!"transparent".equals(background)) {
             try {
-                int color = Integer.parseInt(background.replace("#", ""), 16);
+                int color = com.hologramx.utils.ColorUtils.hexToARGB(background);
                 display.setBackgroundColor(org.bukkit.Color.fromARGB(color));
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 // Use transparent if invalid color
                 display.setBackgroundColor(org.bukkit.Color.fromARGB(0));
             }
