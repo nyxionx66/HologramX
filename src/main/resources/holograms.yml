@@ -1,0 +1,106 @@
+# HologramX Holograms Configuration
+# This file stores all hologram data
+
+# Example hologram configuration (based on your provided example)
+welcomeServer:
+  type: TEXT
+  location:
+    world: the_map
+    x: -3.5
+    y: 66.11650085449219
+    z: 0.5
+    yaw: -90.0
+    pitch: 0.0
+  visibility_distance: -1
+  visibility: ALL
+  persistent: true
+  scale_x: 1.5
+  scale_y: 1.5
+  scale_z: 1.5
+  translation_x: 0.0
+  translation_y: 0.0
+  translation_z: 0.0
+  shadow_radius: 0.0
+  shadow_strength: 1.0
+  text:
+    - "<gradient:#FFD700:#FFA500><b>WELCOME, %player_name%!</b></gradient>"
+    - "<white>"
+    - "<gray>You have entered the</gray> <bold><gradient:red:dark_red>ANARCHY MINES</gradient></bold>"
+    - "<white>The rule is simple: <red><b>SURVIVE.</b></red></white>"
+    - "<white>The goal is simpler: <gold><b>GET RICH.</b></gold></white>"
+    - "<gray><i>Mine, Sell, and Rise to Power.</i></gray>"
+    - "<white>"
+    - "<dark_red><b><bold>TRUST NO ONE.</bold></b></dark_red>"
+  text_shadow: false
+  see_through: false
+  text_alignment: center
+  update_text_interval: -1
+  background: transparent
+  billboard: fixed
+
+# Additional example holograms
+
+spawn_info:
+  type: TEXT
+  location:
+    world: world
+    x: 0.5
+    y: 100.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+  visibility_distance: 50
+  visibility: ALL
+  persistent: true
+  scale_x: 1.0
+  scale_y: 1.0
+  scale_z: 1.0
+  translation_x: 0.0
+  translation_y: 0.0
+  translation_z: 0.0
+  shadow_radius: 0.0
+  shadow_strength: 1.0
+  text:
+    - "<gradient:#00ff00:#0080ff><b>SERVER SPAWN</b></gradient>"
+    - "<white>"
+    - "<gray>Welcome to our server!</gray>"
+    - "<yellow>Type <white>/help</white> for commands</yellow>"
+  text_shadow: true
+  see_through: false
+  text_alignment: center
+  update_text_interval: -1
+  background: transparent
+  billboard: vertical
+
+player_stats:
+  type: TEXT
+  location:
+    world: world
+    x: 10.5
+    y: 65.0
+    z: 5.5
+    yaw: 180.0
+    pitch: 0.0
+  visibility_distance: 30
+  visibility: ALL
+  persistent: true
+  scale_x: 0.8
+  scale_y: 0.8
+  scale_z: 0.8
+  translation_x: 0.0
+  translation_y: 1.0
+  translation_z: 0.0
+  shadow_radius: 1.0
+  shadow_strength: 0.5
+  text:
+    - "<gold><b>PLAYER STATS</b></gold>"
+    - "<white>Player: <yellow>%player_name%</yellow></white>"
+    - "<white>Level: <green>%player_level%</green></white>"
+    - "<white>Balance: <gold>$%vault_eco_balance%</gold></white>"
+    - "<white>Play Time: <blue>%statistic_play_one_minute%</blue></white>"
+  text_shadow: false
+  see_through: true
+  text_alignment: left
+  update_text_interval: 20
+  background: "#40000000"
+  billboard: vertical
