@@ -412,7 +412,10 @@ public class Hologram {
     public float getShadowStrength() { return shadowStrength; }
     public void setShadowStrength(float shadowStrength) { this.shadowStrength = shadowStrength; }
     public List<String> getTextLines() { return textLines; }
-    public void setTextLines(List<String> textLines) { this.textLines = textLines; }
+    public void setTextLines(List<String> textLines) { 
+        this.textLines = textLines;
+        ensureLineScaleSize(textLines.size());
+    }
     public boolean isTextShadow() { return textShadow; }
     public void setTextShadow(boolean textShadow) { this.textShadow = textShadow; }
     public boolean isSeeThrough() { return seeThrough; }
