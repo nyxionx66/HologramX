@@ -244,7 +244,9 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             "persistent", String.valueOf(hologram.isPersistent()));
     }
     
-    private void handleMove(CommandSender sender, String[] args) {
+    // General Hologram Property Commands
+    
+    private void handleMoveHere(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             plugin.getMessages().sendMessage((Player) sender, "player-only");
             return;
@@ -257,7 +259,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         
         if (args.length < 2) {
             plugin.getMessages().sendMessage(player, "invalid-syntax", 
-                "usage", "/hx move <name>");
+                "usage", "/hx moveHere <name>");
             return;
         }
         
@@ -274,6 +276,380 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         hologram.spawn();
         
         plugin.getMessages().sendMessage(player, "hologram-moved", "name", name);
+    }
+    
+    private void handleMoveTo(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.move")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 5) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx moveTo <name> <x> <y> <z> [yaw] [pitch]");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            double x = Double.parseDouble(args[2]);
+            double y = Double.parseDouble(args[3]);
+            double z = Double.parseDouble(args[4]);
+            float yaw = args.length > 5 ? Float.parseFloat(args[5]) : 0.0f;
+            float pitch = args.length > 6 ? Float.parseFloat(args[6]) : 0.0f;
+            
+            Location newLocation = new Location(hologram.getLocation().getWorld(), x, y, z, yaw, pitch);
+            
+            hologram.despawn();
+            hologram.setLocation(newLocation);
+            hologram.spawn();
+            
+            plugin.getMessages().sendMessage(player, "hologram-moved", "name", name);
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", "coordinates");
+        }
+    }
+    
+    private void handleRotate(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx rotate <name> <degrees>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            float degrees = Float.parseFloat(args[2]);
+            Location loc = hologram.getLocation();
+            loc.setYaw(degrees);
+            
+            hologram.despawn();
+            hologram.setLocation(loc);
+            hologram.spawn();
+            
+            player.sendMessage("§aRotated hologram '" + name + "' to " + degrees + " degrees (Y-axis).");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleRotatePitch(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx rotatePitch <name> <degrees>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            float degrees = Float.parseFloat(args[2]);
+            Location loc = hologram.getLocation();
+            loc.setPitch(degrees);
+            
+            hologram.despawn();
+            hologram.setLocation(loc);
+            hologram.spawn();
+            
+            player.sendMessage("§aRotated hologram '" + name + "' pitch to " + degrees + " degrees (X-axis).");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleVisibilityDistance(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx visibilityDistance <name> <distance>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            int distance = Integer.parseInt(args[2]);
+            hologram.setVisibilityDistance(distance);
+            
+            hologram.despawn();
+            hologram.spawn();
+            
+            String distanceText = distance == -1 ? "unlimited" : distance + " blocks";
+            player.sendMessage("§aSet visibility distance for hologram '" + name + "' to " + distanceText + ".");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleVisibility(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx visibility <name> <ALL|MANUAL|PERMISSION_NEEDED>");
+            return;
+        }
+        
+        String name = args[1];
+        String visibilityType = args[2].toUpperCase();
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            Hologram.VisibilityType visibility;
+            switch (visibilityType) {
+                case "ALL" -> visibility = Hologram.VisibilityType.ALL;
+                case "MANUAL" -> visibility = Hologram.VisibilityType.NONE;
+                case "PERMISSION_NEEDED" -> visibility = Hologram.VisibilityType.PERMISSION;
+                default -> {
+                    player.sendMessage("§cInvalid visibility type! Use: ALL, MANUAL, or PERMISSION_NEEDED");
+                    return;
+                }
+            }
+            
+            hologram.setVisibility(visibility);
+            player.sendMessage("§aSet visibility for hologram '" + name + "' to " + visibilityType + ".");
+            
+        } catch (IllegalArgumentException e) {
+            player.sendMessage("§cInvalid visibility type! Use: ALL, MANUAL, or PERMISSION_NEEDED");
+        }
+    }
+    
+    private void handleScale(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx scale <name> <factor>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            float factor = Float.parseFloat(args[2]);
+            hologram.setScaleX(factor);
+            hologram.setScaleY(factor);
+            hologram.setScaleZ(factor);
+            
+            hologram.despawn();
+            hologram.spawn();
+            
+            player.sendMessage("§aScaled hologram '" + name + "' by factor " + factor + ".");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleBillboard(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx billboard <name> <center|fixed|vertical|horizontal>");
+            return;
+        }
+        
+        String name = args[1];
+        String billboardType = args[2].toUpperCase();
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            Hologram.BillboardType billboard = Hologram.BillboardType.valueOf(billboardType);
+            hologram.setBillboard(billboard);
+            
+            hologram.despawn();
+            hologram.spawn();
+            
+            player.sendMessage("§aSet billboard mode for hologram '" + name + "' to " + billboardType + ".");
+            
+        } catch (IllegalArgumentException e) {
+            player.sendMessage("§cInvalid billboard type! Use: center, fixed, vertical, or horizontal");
+        }
+    }
+    
+    private void handleShadowStrength(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx shadowStrength <name> <value>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            float strength = Float.parseFloat(args[2]);
+            hologram.setShadowStrength(strength);
+            
+            hologram.despawn();
+            hologram.spawn();
+            
+            player.sendMessage("§aSet shadow strength for hologram '" + name + "' to " + strength + ".");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleShadowRadius(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx shadowRadius <name> <radius>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            float radius = Float.parseFloat(args[2]);
+            hologram.setShadowRadius(radius);
+            
+            hologram.despawn();
+            hologram.spawn();
+            
+            player.sendMessage("§aSet shadow radius for hologram '" + name + "' to " + radius + ".");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
     }
     
     private void handleToggle(CommandSender sender, String[] args) {
