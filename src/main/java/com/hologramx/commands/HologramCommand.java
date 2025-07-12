@@ -808,7 +808,60 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         }
     }
     
-    private void handleText(CommandSender sender, String[] args) {
+    // Text Hologram Commands
+    
+    private void handleSetLine(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 4) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx setLine <name> <line> <text...>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int lineNumber = Integer.parseInt(args[2]) - 1;
+            String text = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+            
+            if (lineNumber >= 0 && lineNumber < hologram.getTextLines().size()) {
+                hologram.getTextLines().set(lineNumber, text);
+                
+                hologram.despawn();
+                hologram.spawn();
+                
+                plugin.getMessages().sendMessage(player, "text-line-set", 
+                    "name", name, "line", String.valueOf(lineNumber + 1));
+            } else {
+                plugin.getMessages().sendMessage(player, "text-line-invalid", 
+                    "max", String.valueOf(hologram.getTextLines().size()));
+            }
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleAddLine(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             plugin.getMessages().sendMessage((Player) sender, "player-only");
             return;
@@ -821,70 +874,362 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         
         if (args.length < 3) {
             plugin.getMessages().sendMessage(player, "invalid-syntax", 
-                "usage", "/hx text <name> <add|remove|set|clear> [args...]");
+                "usage", "/hx addLine <name> <text...>");
             return;
         }
         
         String name = args[1];
-        String action = args[2].toLowerCase();
-        
         Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
         if (hologram == null) {
             plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
             return;
         }
         
         if (hologram.getType() != Hologram.HologramType.TEXT) {
-            plugin.getMessages().sendMessage(player, "error-invalid-location");
+            player.sendMessage("§cThis command only works with text holograms!");
             return;
         }
         
-        switch (action) {
-            case "add" -> {
-                if (args.length < 4) {
-                    plugin.getMessages().sendMessage(player, "invalid-syntax", 
-                        "usage", "/hx text <name> add <text>");
-                    return;
-                }
+        String text = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+        hologram.getTextLines().add(text);
+        
+        hologram.despawn();
+        hologram.spawn();
+        
+        plugin.getMessages().sendMessage(player, "text-line-added", "name", name);
+    }
+    
+    private void handleRemoveLine(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx removeLine <name> <line>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int lineNumber = Integer.parseInt(args[2]) - 1;
+            
+            if (lineNumber >= 0 && lineNumber < hologram.getTextLines().size()) {
+                hologram.getTextLines().remove(lineNumber);
                 
-                String text = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
-                hologram.getTextLines().add(text);
                 hologram.despawn();
                 hologram.spawn();
                 
-                plugin.getMessages().sendMessage(player, "text-line-added", "name", name);
+                plugin.getMessages().sendMessage(player, "text-line-removed", 
+                    "name", name, "line", String.valueOf(lineNumber + 1));
+            } else {
+                plugin.getMessages().sendMessage(player, "text-line-invalid", 
+                    "max", String.valueOf(hologram.getTextLines().size()));
             }
-            case "remove" -> {
-                if (args.length < 4) {
-                    plugin.getMessages().sendMessage(player, "invalid-syntax", 
-                        "usage", "/hx text <name> remove <line>");
-                    return;
-                }
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleInsertBefore(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 4) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx insertBefore <name> <line> <text...>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int lineNumber = Integer.parseInt(args[2]) - 1;
+            String text = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+            
+            if (lineNumber >= 0 && lineNumber <= hologram.getTextLines().size()) {
+                hologram.getTextLines().add(lineNumber, text);
                 
-                try {
-                    int line = Integer.parseInt(args[3]) - 1;
-                    if (line >= 0 && line < hologram.getTextLines().size()) {
-                        hologram.getTextLines().remove(line);
-                        hologram.despawn();
-                        hologram.spawn();
-                        
-                        plugin.getMessages().sendMessage(player, "text-line-removed", 
-                            "name", name, "line", String.valueOf(line + 1));
-                    } else {
-                        plugin.getMessages().sendMessage(player, "text-line-invalid", 
-                            "max", String.valueOf(hologram.getTextLines().size()));
-                    }
-                } catch (NumberFormatException e) {
-                    plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[3]);
-                }
-            }
-            case "clear" -> {
-                hologram.getTextLines().clear();
                 hologram.despawn();
                 hologram.spawn();
                 
-                plugin.getMessages().sendMessage(player, "text-cleared", "name", name);
+                plugin.getMessages().sendMessage(player, "text-line-inserted", 
+                    "name", name, "line", String.valueOf(lineNumber + 1));
+            } else {
+                plugin.getMessages().sendMessage(player, "text-line-invalid", 
+                    "max", String.valueOf(hologram.getTextLines().size()));
             }
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleInsertAfter(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 4) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx insertAfter <name> <line> <text...>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int lineNumber = Integer.parseInt(args[2]);
+            String text = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+            
+            if (lineNumber >= 1 && lineNumber <= hologram.getTextLines().size()) {
+                hologram.getTextLines().add(lineNumber, text);
+                
+                hologram.despawn();
+                hologram.spawn();
+                
+                plugin.getMessages().sendMessage(player, "text-line-inserted", 
+                    "name", name, "line", String.valueOf(lineNumber + 1));
+            } else {
+                plugin.getMessages().sendMessage(player, "text-line-invalid", 
+                    "max", String.valueOf(hologram.getTextLines().size()));
+            }
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
+    private void handleUpdateTextInterval(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx updateTextInterval <name> <ticks|seconds|minutes>");
+            return;
+        }
+        
+        String name = args[1];
+        String intervalStr = args[2].toLowerCase();
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            int interval;
+            if (intervalStr.endsWith("t") || intervalStr.endsWith("ticks")) {
+                interval = Integer.parseInt(intervalStr.replaceAll("[^0-9]", ""));
+            } else if (intervalStr.endsWith("s") || intervalStr.endsWith("seconds")) {
+                interval = Integer.parseInt(intervalStr.replaceAll("[^0-9]", "")) * 20;
+            } else if (intervalStr.endsWith("m") || intervalStr.endsWith("minutes")) {
+                interval = Integer.parseInt(intervalStr.replaceAll("[^0-9]", "")) * 1200;
+            } else {
+                interval = Integer.parseInt(intervalStr);
+            }
+            
+            hologram.setUpdateTextInterval(interval);
+            
+            String intervalText = interval == -1 ? "disabled" : interval + " ticks";
+            player.sendMessage("§aSet update interval for hologram '" + name + "' to " + intervalText + ".");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", intervalStr);
+        }
+    }
+    
+    private void handleBackground(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx background <name> <color>");
+            return;
+        }
+        
+        String name = args[1];
+        String color = args[2];
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        hologram.setBackground(color);
+        
+        hologram.despawn();
+        hologram.spawn();
+        
+        player.sendMessage("§aSet background color for hologram '" + name + "' to " + color + ".");
+    }
+    
+    private void handleTextShadow(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx textShadow <name> <true|false>");
+            return;
+        }
+        
+        String name = args[1];
+        String shadowStr = args[2].toLowerCase();
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        boolean shadow = "true".equals(shadowStr) || "on".equals(shadowStr) || "yes".equals(shadowStr);
+        hologram.setTextShadow(shadow);
+        
+        hologram.despawn();
+        hologram.spawn();
+        
+        player.sendMessage("§aSet text shadow for hologram '" + name + "' to " + shadow + ".");
+    }
+    
+    private void handleTextAlignment(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx textAlignment <name> <center|left|right>");
+            return;
+        }
+        
+        String name = args[1];
+        String alignmentStr = args[2].toUpperCase();
+        
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        if (hologram.getType() != Hologram.HologramType.TEXT) {
+            player.sendMessage("§cThis command only works with text holograms!");
+            return;
+        }
+        
+        try {
+            Hologram.TextAlignment alignment = Hologram.TextAlignment.valueOf(alignmentStr);
+            hologram.setTextAlignment(alignment);
+            
+            hologram.despawn();
+            hologram.spawn();
+            
+            player.sendMessage("§aSet text alignment for hologram '" + name + "' to " + alignmentStr + ".");
+            
+        } catch (IllegalArgumentException e) {
+            player.sendMessage("§cInvalid alignment! Use: center, left, or right");
         }
     }
     
