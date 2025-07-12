@@ -1252,13 +1252,36 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
     
     private void sendUsage(CommandSender sender) {
         sender.sendMessage("§6HologramX Commands:");
+        sender.sendMessage("§e§lBasic Commands:");
         sender.sendMessage("§e/hx create <name> <type> §7- Create hologram");
         sender.sendMessage("§e/hx delete <name> §7- Delete hologram");
         sender.sendMessage("§e/hx list [page] §7- List holograms");
         sender.sendMessage("§e/hx info <name> §7- Show hologram info");
-        sender.sendMessage("§e/hx move <name> §7- Move hologram");
-        sender.sendMessage("§e/hx text <name> <add|remove|clear> §7- Edit text");
+        sender.sendMessage("§e/hx clone <name> <new_name> §7- Clone hologram");
         sender.sendMessage("§e/hx reload §7- Reload plugin");
+        
+        sender.sendMessage("§e§lGeneral Properties:");
+        sender.sendMessage("§e/hx moveHere <name> §7- Move to your location");
+        sender.sendMessage("§e/hx moveTo <name> <x> <y> <z> [yaw] [pitch] §7- Set exact position");
+        sender.sendMessage("§e/hx rotate <name> <degrees> §7- Rotate Y-axis");
+        sender.sendMessage("§e/hx rotatePitch <name> <degrees> §7- Rotate X-axis");
+        sender.sendMessage("§e/hx visibilityDistance <name> <distance> §7- Set view distance");
+        sender.sendMessage("§e/hx visibility <name> <ALL|MANUAL|PERMISSION_NEEDED> §7- Set visibility");
+        sender.sendMessage("§e/hx scale <name> <factor> §7- Resize hologram");
+        sender.sendMessage("§e/hx billboard <name> <center|fixed|vertical|horizontal> §7- Set orientation");
+        sender.sendMessage("§e/hx shadowStrength <name> <value> §7- Shadow quality");
+        sender.sendMessage("§e/hx shadowRadius <name> <radius> §7- Shadow spread");
+        
+        sender.sendMessage("§e§lText Commands:");
+        sender.sendMessage("§e/hx setLine <name> <line> <text...> §7- Replace line");
+        sender.sendMessage("§e/hx addLine <name> <text...> §7- Add new line");
+        sender.sendMessage("§e/hx removeLine <name> <line> §7- Remove line");
+        sender.sendMessage("§e/hx insertBefore <name> <line> <text...> §7- Insert above");
+        sender.sendMessage("§e/hx insertAfter <name> <line> <text...> §7- Insert below");
+        sender.sendMessage("§e/hx updateTextInterval <name> <time> §7- Auto-refresh rate");
+        sender.sendMessage("§e/hx background <name> <color> §7- Background color");
+        sender.sendMessage("§e/hx textShadow <name> <true|false> §7- Text shadow");
+        sender.sendMessage("§e/hx textAlignment <name> <center|left|right> §7- Text alignment");
     }
     
     @Override
