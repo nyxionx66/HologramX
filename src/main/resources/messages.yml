@@ -55,7 +55,8 @@ error-invalid-location: "<red>Invalid location specified!</red>"
 error-invalid-world: "<red>World '<yellow>{world}</yellow>' not found!</red>"
 error-invalid-number: "<red>Invalid number: <yellow>{value}</yellow></red>"
 error-invalid-material: "<red>Invalid material: <yellow>{material}</yellow></red>"
-error-invalid-color: "<red>Invalid color: <yellow>{color}</yellow></red>"
+error-invalid-color: "<red>Invalid color format! Use: transparent, color names, #RRGGBB, or rgb(r,g,b)</red>"
+color-examples: "<gray>Examples: transparent, red, #FF0000, rgb(255,0,0)</gray>"
 
 # Success Messages
 backup-created: "<green>Backup created successfully!</green>"
