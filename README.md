@@ -34,25 +34,60 @@ Advanced hologram plugin for Minecraft Paper 1.21+ servers using display entitie
 ## Commands
 
 ### Admin Commands (`/hologramx`, `/hx`)
+
+#### Basic Management
 ```
 /hx create <name> <type>        - Create a new hologram
 /hx delete <name>               - Delete a hologram
 /hx list [page]                 - List all holograms
 /hx info <name>                 - Show hologram information
-/hx move <name>                 - Move hologram to your location
 /hx toggle <name>               - Toggle hologram visibility
 /hx clone <name> <new_name>     - Clone existing hologram
 /hx near [distance]             - Show nearby holograms
 /hx tp <name>                   - Teleport to hologram
-/hx text <name> <action> [args] - Edit hologram text
 /hx reload                      - Reload plugin configuration
 ```
 
-### Text Editing Commands
+#### Unified Edit Command
 ```
-/hx text <name> add <text>         - Add text line
-/hx text <name> remove <line>      - Remove text line
-/hx text <name> clear              - Clear all text lines
+/hx edit <name> <property> [args...]  - Edit hologram properties
+```
+
+**General Properties:**
+```
+/hx edit <name> moveHere                           - Move to your location
+/hx edit <name> moveTo <x> <y> <z> [yaw] [pitch]  - Set exact position
+/hx edit <name> rotate <degrees>                   - Rotate Y-axis
+/hx edit <name> rotatePitch <degrees>              - Rotate X-axis
+/hx edit <name> visibilityDistance <distance>      - Set view distance
+/hx edit <name> visibility <ALL|MANUAL|PERMISSION_NEEDED>  - Set visibility
+/hx edit <name> scale <factor>                     - Resize hologram
+/hx edit <name> billboard <center|fixed|vertical|horizontal>  - Set orientation
+/hx edit <name> shadowStrength <value>             - Shadow quality
+/hx edit <name> shadowRadius <radius>              - Shadow spread
+```
+
+**Text Properties:**
+```
+/hx edit <name> setLine <line> <text...>           - Replace text line
+/hx edit <name> addLine <text...>                  - Add new text line
+/hx edit <name> removeLine <line>                  - Remove text line
+/hx edit <name> insertBefore <line> <text...>      - Insert line above
+/hx edit <name> insertAfter <line> <text...>       - Insert line below
+/hx edit <name> clearText                          - Clear all text
+/hx edit <name> background <color>                 - Set background color
+/hx edit <name> textShadow <true|false>            - Toggle text shadow
+/hx edit <name> textAlignment <center|left|right>  - Set text alignment
+/hx edit <name> updateTextInterval <time>          - Set auto-refresh rate
+```
+
+#### Direct Commands (Legacy Support)
+All edit commands are also available as direct commands:
+```
+/hx moveHere <name>             - Move hologram to your location
+/hx addLine <name> <text...>    - Add text line
+/hx scale <name> <factor>       - Scale hologram
+# ... and all other edit commands
 ```
 
 ### User Commands (`/hologram`, `/holo`)
