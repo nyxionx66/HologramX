@@ -1525,12 +1525,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         
         if (args.length == 1) {
             List<String> commands = Arrays.asList(
-                "create", "delete", "list", "info", "toggle", "clone", "near", "tp", "reload", "edit",
-                "moveHere", "position", "moveTo", "rotate", "rotatePitch", "visibilityDistance", 
-                "visibility", "scale", "billboard", "shadowStrength", "shadowRadius",
-                "setLine", "addLine", "removeLine", "insertBefore", "insertAfter", 
-                "updateTextInterval", "background", "textShadow", "textAlignment",
-                "lineScale", "lineScaleX", "lineScaleY", "lineScaleZ"
+                "create", "delete", "list", "info", "toggle", "clone", "near", "tp", "reload", "edit"
             );
             return commands.stream()
                 .filter(cmd -> cmd.toLowerCase().startsWith(args[0].toLowerCase()))
