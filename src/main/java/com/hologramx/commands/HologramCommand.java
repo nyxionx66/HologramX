@@ -1611,28 +1611,13 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         if (args.length == 4) {
             String subCommand = args[0].toLowerCase();
             
-            // For direct line commands
-            if (Arrays.asList("setline", "removeline", "insertbefore", "insertafter", 
-                "linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
-                
-                if (Arrays.asList("linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
-                    // Scale value suggestions
-                    return Arrays.asList("0.5", "1.0", "1.5", "2.0", "2.5", "3.0").stream()
-                        .filter(scale -> scale.startsWith(args[3]))
-                        .collect(Collectors.toList());
-                } else if (Arrays.asList("setline", "insertbefore", "insertafter").contains(subCommand)) {
-                    // Text suggestions for line content
-                    return Arrays.asList("<red>", "<blue>", "<green>", "<yellow>", "<gold>", "<gray>",
-                        "<gradient:", "<bold>", "<italic>", "<underlined>", "Welcome to", "Line text here")
-                        .stream()
-                        .filter(text -> text.toLowerCase().startsWith(args[3].toLowerCase()))
-                        .collect(Collectors.toList());
-                }
+            // Only edit commands exist now
+            if (!"edit".equals(subCommand)) {
+                return completions;
             }
             
             // For edit commands
-            if ("edit".equals(subCommand)) {
-                String editCommand = args[2].toLowerCase();
+            String editCommand = args[2].toLowerCase();
                 
                 if ("visibility".equals(editCommand)) {
                     return Arrays.asList("ALL", "MANUAL", "PERMISSION_NEEDED").stream()
