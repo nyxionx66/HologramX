@@ -1565,7 +1565,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                     "moveHere", "moveTo", "rotate", "rotatePitch", "visibilityDistance", "visibility",
                     "scale", "billboard", "shadowStrength", "shadowRadius", "setLine", "addLine",
                     "removeLine", "insertBefore", "insertAfter", "updateTextInterval", "background",
-                    "textShadow", "textAlignment", "clearText", "lineScale", "lineScaleX", "lineScaleY", "lineScaleZ"
+                    "textShadow", "textAlignment", "clearText", "lineScale", "lineScaleX", "lineScaleY", "lineScaleZ", "lineSpacing"
                 );
                 return editCommands.stream()
                     .filter(cmd -> cmd.toLowerCase().startsWith(args[2].toLowerCase()))
