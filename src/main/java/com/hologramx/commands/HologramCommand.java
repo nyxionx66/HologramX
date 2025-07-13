@@ -1462,8 +1462,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                     case "Z" -> hologram.setLineScale(lineNumber, currentX, currentY, scale);
                 }
                 
-                hologram.despawn();
-                hologram.spawn();
+                hologram.refresh();
                 
                 player.sendMessage("§aSet " + axis + "-scale for line " + (lineNumber + 1) + " of hologram '" + name + "' to " + scale + ".");
             } else {
