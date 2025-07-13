@@ -1393,8 +1393,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             if (lineNumber >= 0 && lineNumber < hologram.getTextLines().size()) {
                 hologram.setLineScaleUniform(lineNumber, scale);
                 
-                hologram.despawn();
-                hologram.spawn();
+                hologram.refresh();
                 
                 player.sendMessage("§aSet scale for line " + (lineNumber + 1) + " of hologram '" + name + "' to " + scale + ".");
             } else {
