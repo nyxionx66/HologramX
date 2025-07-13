@@ -1528,7 +1528,8 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                 "moveHere", "position", "moveTo", "rotate", "rotatePitch", "visibilityDistance", 
                 "visibility", "scale", "billboard", "shadowStrength", "shadowRadius",
                 "setLine", "addLine", "removeLine", "insertBefore", "insertAfter", 
-                "updateTextInterval", "background", "textShadow", "textAlignment"
+                "updateTextInterval", "background", "textShadow", "textAlignment",
+                "lineScale", "lineScaleX", "lineScaleY", "lineScaleZ"
             );
             return commands.stream()
                 .filter(cmd -> cmd.toLowerCase().startsWith(args[0].toLowerCase()))
@@ -1543,7 +1544,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                 "moveto", "rotate", "rotatepitch", "visibilitydistance", "visibility", "scale", 
                 "billboard", "shadowstrength", "shadowradius", "setline", "addline", "removeline", 
                 "insertbefore", "insertafter", "updatetextinterval", "background", "textshadow", 
-                "textalignment").contains(subCommand)) {
+                "textalignment", "linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
                 return plugin.getHologramManager().getHolograms().stream()
                     .map(Hologram::getId)
                     .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
@@ -1612,80 +1613,129 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                 "linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
                 Hologram hologram = plugin.getHologramManager().getHologram(args[1]);
                 if (hologram != null && hologram.getType() == Hologram.HologramType.TEXT) {
-                    List<String> lineNumbers = new ArrayList<>();
-                    int maxLines = hologram.getTextLines().size();
-                    
-                    if ("insertbefore".equals(subCommand) || "insertafter".equals(subCommand)) {
-                        // For insert commands, allow one more than current lines
-                        maxLines++;
-                    }
-                    
-                    for (int i = 1; i <= maxLines; i++) {
-                        String lineNum = String.valueOf(i);
-                        if (lineNum.startsWith(args[2])) {
-                            lineNumbers.add(lineNum);
-                        }
-                    }
-                    return lineNumbers;
+                    return getLineNumberCompletions(hologram, subCommand, args[2]);
                 }
             }
         }
         
-        if (args.length == 4 && "edit".equals(args[0].toLowerCase())) {
-            String editCommand = args[2].toLowerCase();
+        if (args.length == 4) {
+            String subCommand = args[0].toLowerCase();
             
-            if ("visibility".equals(editCommand)) {
-                return Arrays.asList("ALL", "MANUAL", "PERMISSION_NEEDED").stream()
-                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
-                    .collect(Collectors.toList());
+            // For direct line commands
+            if (Arrays.asList("setline", "removeline", "insertbefore", "insertafter", 
+                "linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
+                
+                if (Arrays.asList("linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
+                    // Scale value suggestions
+                    return Arrays.asList("0.5", "1.0", "1.5", "2.0", "2.5", "3.0").stream()
+                        .filter(scale -> scale.startsWith(args[3]))
+                        .collect(Collectors.toList());
+                } else if (Arrays.asList("setline", "insertbefore", "insertafter").contains(subCommand)) {
+                    // Text suggestions for line content
+                    return Arrays.asList("<red>", "<blue>", "<green>", "<yellow>", "<gold>", "<gray>",
+                        "<gradient:", "<bold>", "<italic>", "<underlined>", "Welcome to", "Line text here")
+                        .stream()
+                        .filter(text -> text.toLowerCase().startsWith(args[3].toLowerCase()))
+                        .collect(Collectors.toList());
+                }
             }
             
-            if ("billboard".equals(editCommand)) {
-                return Arrays.asList("center", "fixed", "vertical", "horizontal").stream()
-                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
-                    .collect(Collectors.toList());
-            }
-            
-            if ("textshadow".equals(editCommand)) {
-                return Arrays.asList("true", "false").stream()
-                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
-                    .collect(Collectors.toList());
-            }
-            
-            if ("textalignment".equals(editCommand)) {
-                return Arrays.asList("center", "left", "right").stream()
-                    .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
-                    .collect(Collectors.toList());
-            }
-            
-            if ("background".equals(editCommand)) {
-                return ColorUtils.getColorSuggestions(args[3]);
-            }
-            
-            // Line number completions for edit commands
-            if (Arrays.asList("setline", "removeline", "insertbefore", "insertafter",
-                "linescale", "linescalex", "linescaley", "linescalez").contains(editCommand)) {
-                Hologram hologram = plugin.getHologramManager().getHologram(args[1]);
-                if (hologram != null && hologram.getType() == Hologram.HologramType.TEXT) {
-                    List<String> lineNumbers = new ArrayList<>();
-                    int maxLines = hologram.getTextLines().size();
-                    
-                    if ("insertbefore".equals(editCommand) || "insertafter".equals(editCommand)) {
-                        // For insert commands, allow one more than current lines
-                        maxLines++;
+            // For edit commands
+            if ("edit".equals(subCommand)) {
+                String editCommand = args[2].toLowerCase();
+                
+                if ("visibility".equals(editCommand)) {
+                    return Arrays.asList("ALL", "MANUAL", "PERMISSION_NEEDED").stream()
+                        .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                        .collect(Collectors.toList());
+                }
+                
+                if ("billboard".equals(editCommand)) {
+                    return Arrays.asList("center", "fixed", "vertical", "horizontal").stream()
+                        .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                        .collect(Collectors.toList());
+                }
+                
+                if ("textshadow".equals(editCommand)) {
+                    return Arrays.asList("true", "false").stream()
+                        .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                        .collect(Collectors.toList());
+                }
+                
+                if ("textalignment".equals(editCommand)) {
+                    return Arrays.asList("center", "left", "right").stream()
+                        .filter(type -> type.toLowerCase().startsWith(args[3].toLowerCase()))
+                        .collect(Collectors.toList());
+                }
+                
+                if ("background".equals(editCommand)) {
+                    return ColorUtils.getColorSuggestions(args[3]);
+                }
+                
+                // Line number completions for edit commands
+                if (Arrays.asList("setline", "removeline", "insertbefore", "insertafter",
+                    "linescale", "linescalex", "linescaley", "linescalez").contains(editCommand)) {
+                    Hologram hologram = plugin.getHologramManager().getHologram(args[1]);
+                    if (hologram != null && hologram.getType() == Hologram.HologramType.TEXT) {
+                        return getLineNumberCompletions(hologram, editCommand, args[3]);
                     }
-                    
-                    for (int i = 1; i <= maxLines; i++) {
-                        String lineNum = String.valueOf(i);
-                        if (lineNum.startsWith(args[3])) {
-                            lineNumbers.add(lineNum);
-                        }
-                    }
-                    return lineNumbers;
+                }
+            }
+        }
+        
+        if (args.length == 5) {
+            String subCommand = args[0].toLowerCase();
+            
+            // For edit line-specific scale commands
+            if ("edit".equals(subCommand)) {
+                String editCommand = args[2].toLowerCase();
+                if (Arrays.asList("linescale", "linescalex", "linescaley", "linescalez").contains(editCommand)) {
+                    // Scale value suggestions
+                    return Arrays.asList("0.5", "1.0", "1.5", "2.0", "2.5", "3.0").stream()
+                        .filter(scale -> scale.startsWith(args[4]))
+                        .collect(Collectors.toList());
+                } else if (Arrays.asList("setline", "insertbefore", "insertafter").contains(editCommand)) {
+                    // Text suggestions for line content
+                    return Arrays.asList("<red>", "<blue>", "<green>", "<yellow>", "<gold>", "<gray>",
+                        "<gradient:", "<bold>", "<italic>", "<underlined>", "Welcome to", "Line text here")
+                        .stream()
+                        .filter(text -> text.toLowerCase().startsWith(args[4].toLowerCase()))
+                        .collect(Collectors.toList());
                 }
             }
         }
         
         return completions;
+    }
+    
+    /**
+     * Helper method to get line number completions for line-specific commands
+     */
+    private List<String> getLineNumberCompletions(Hologram hologram, String command, String input) {
+        List<String> lineNumbers = new ArrayList<>();
+        int maxLines = hologram.getTextLines().size();
+        
+        // For insert commands, allow one more than current lines
+        if ("insertbefore".equals(command) || "insertafter".equals(command)) {
+            maxLines = Math.max(maxLines, 1); // At least allow line 1 for empty holograms
+            if (maxLines > 0) {
+                maxLines++; // Allow inserting after the last line
+            }
+        }
+        
+        // Ensure at least line 1 exists for most commands
+        if (maxLines == 0 && !"removeline".equals(command)) {
+            maxLines = 1;
+        }
+        
+        for (int i = 1; i <= maxLines; i++) {
+            String lineNum = String.valueOf(i);
+            if (lineNum.startsWith(input)) {
+                lineNumbers.add(lineNum);
+            }
+        }
+        
+        return lineNumbers;
+    }
     }
 }
