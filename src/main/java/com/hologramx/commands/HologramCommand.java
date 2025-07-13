@@ -45,35 +45,8 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "tp", "teleport" -> handleTeleport(sender, args);
             case "reload" -> handleReload(sender, args);
             
-            // Edit command (unified editing)
+            // Edit command (unified editing) - ONLY WAY TO EDIT
             case "edit" -> handleEdit(sender, args);
-            
-            // Legacy direct commands (still supported)
-            case "movehere", "position" -> handleMoveHere(sender, args);
-            case "moveto" -> handleMoveTo(sender, args);
-            case "rotate" -> handleRotate(sender, args);
-            case "rotatepitch" -> handleRotatePitch(sender, args);
-            case "visibilitydistance" -> handleVisibilityDistance(sender, args);
-            case "visibility" -> handleVisibility(sender, args);
-            case "scale" -> handleScale(sender, args);
-            case "billboard" -> handleBillboard(sender, args);
-            case "shadowstrength" -> handleShadowStrength(sender, args);
-            case "shadowradius" -> handleShadowRadius(sender, args);
-            case "setline" -> handleSetLine(sender, args);
-            case "addline" -> handleAddLine(sender, args);
-            case "removeline" -> handleRemoveLine(sender, args);
-            case "insertbefore" -> handleInsertBefore(sender, args);
-            case "insertafter" -> handleInsertAfter(sender, args);
-            case "updatetextinterval" -> handleUpdateTextInterval(sender, args);
-            case "background" -> handleBackground(sender, args);
-            case "textshadow" -> handleTextShadow(sender, args);
-            case "textalignment" -> handleTextAlignment(sender, args);
-            
-            // Line-specific scaling commands
-            case "linescale" -> handleLineScale(sender, args);
-            case "linescalex" -> handleLineScaleX(sender, args);
-            case "linescaley" -> handleLineScaleY(sender, args);
-            case "linescalez" -> handleLineScaleZ(sender, args);
             
             default -> sendUsage(sender);
         }
