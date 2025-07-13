@@ -296,6 +296,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "linescalex" -> handleLineScaleX(sender, editArgs);
             case "linescaley" -> handleLineScaleY(sender, editArgs);
             case "linescalez" -> handleLineScaleZ(sender, editArgs);
+            case "linespacing" -> handleLineSpacing(sender, editArgs);
             
             default -> sendEditUsage(player);
         }
