@@ -379,11 +379,11 @@ public class Hologram {
     public boolean isPersistent() { return persistent; }
     public void setPersistent(boolean persistent) { this.persistent = persistent; }
     public float getScaleX() { return scaleX; }
-    public void setScaleX(float scaleX) { this.scaleX = scaleX; }
+    public void setScaleX(float scaleX) { this.scaleX = Math.max(0.1f, Math.min(10.0f, scaleX)); }
     public float getScaleY() { return scaleY; }
-    public void setScaleY(float scaleY) { this.scaleY = scaleY; }
+    public void setScaleY(float scaleY) { this.scaleY = Math.max(0.1f, Math.min(10.0f, scaleY)); }
     public float getScaleZ() { return scaleZ; }
-    public void setScaleZ(float scaleZ) { this.scaleZ = scaleZ; }
+    public void setScaleZ(float scaleZ) { this.scaleZ = Math.max(0.1f, Math.min(10.0f, scaleZ)); }
     public float getTranslationX() { return translationX; }
     public void setTranslationX(float translationX) { this.translationX = translationX; }
     public float getTranslationY() { return translationY; }
