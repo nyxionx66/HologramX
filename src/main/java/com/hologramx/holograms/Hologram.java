@@ -139,7 +139,7 @@ public class Hologram {
         
         // Set text properties
         display.setShadowed(textShadow);
-        display.setSeeThrough(seeThrough);
+        display.setSeeThrough(false); // Always disable see-through to prevent xray effect
         
         // Set transformation with per-line scaling
         float finalScaleX = scaleX * getLineScaleX(lineIndex);
@@ -156,9 +156,13 @@ public class Hologram {
         display.setShadowRadius(shadowRadius);
         display.setShadowStrength(shadowStrength);
         
-        // Set view range
+        // Set view range - apply to full hologram, not per line
         if (visibilityDistance > 0) {
-            display.setViewRange(visibilityDistance / 16.0f);
+            // Use the actual distance value directly for better control
+            display.setViewRange((float) visibilityDistance);
+        } else {
+            // Default view range for unlimited visibility
+            display.setViewRange(128.0f);
         }
     }
 
