@@ -1647,6 +1647,13 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                     return ColorUtils.getColorSuggestions(args[3]);
                 }
                 
+                if ("linespacing".equals(editCommand)) {
+                    // Line spacing value suggestions
+                    return Arrays.asList("0.1", "0.15", "0.2", "0.25", "0.3", "0.5").stream()
+                        .filter(spacing -> spacing.startsWith(args[3]))
+                        .collect(Collectors.toList());
+                }
+                
                 // Line number completions for edit commands
                 if (Arrays.asList("setline", "removeline", "insertbefore", "insertafter",
                     "linescale", "linescalex", "linescaley", "linescalez").contains(editCommand)) {
@@ -1668,13 +1675,6 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
                     // Scale value suggestions
                     return Arrays.asList("0.5", "1.0", "1.5", "2.0", "2.5", "3.0").stream()
                         .filter(scale -> scale.startsWith(args[4]))
-                        .collect(Collectors.toList());
-                }
-                
-                if ("linespacing".equals(editCommand)) {
-                    // Line spacing value suggestions
-                    return Arrays.asList("0.1", "0.15", "0.2", "0.25", "0.3", "0.5").stream()
-                        .filter(spacing -> spacing.startsWith(args[3]))
                         .collect(Collectors.toList());
                 } else if (Arrays.asList("setline", "insertbefore", "insertafter").contains(editCommand)) {
                     // Text suggestions for line content
