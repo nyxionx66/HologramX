@@ -639,8 +639,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             hologram.setScaleY(factor);
             hologram.setScaleZ(factor);
             
-            hologram.despawn();
-            hologram.spawn();
+            hologram.refresh();
             
             player.sendMessage("§aScaled hologram '" + name + "' by factor " + factor + ".");
             
