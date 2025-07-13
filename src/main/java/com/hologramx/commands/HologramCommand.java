@@ -1449,6 +1449,44 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         }
     }
     
+    private void handleLineSpacing(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            plugin.getMessages().sendMessage((Player) sender, "player-only");
+            return;
+        }
+        
+        if (!sender.hasPermission("hologramx.edit")) {
+            plugin.getMessages().sendMessage(player, "no-permission");
+            return;
+        }
+        
+        if (args.length < 3) {
+            plugin.getMessages().sendMessage(player, "invalid-syntax", 
+                "usage", "/hx edit <name> lineSpacing <value>");
+            return;
+        }
+        
+        String name = args[1];
+        Hologram hologram = plugin.getHologramManager().getHologram(name);
+        
+        if (hologram == null) {
+            plugin.getMessages().sendMessage(player, "hologram-not-found", "name", name);
+            return;
+        }
+        
+        try {
+            double spacing = Double.parseDouble(args[2]);
+            hologram.setLineSpacing(spacing);
+            
+            hologram.refresh();
+            
+            player.sendMessage("§aSet line spacing for hologram '" + name + "' to " + spacing + ".");
+            
+        } catch (NumberFormatException e) {
+            plugin.getMessages().sendMessage(player, "error-invalid-number", "value", args[2]);
+        }
+    }
+    
     private void handleReload(CommandSender sender, String[] args) {
         if (!sender.hasPermission("hologramx.reload")) {
             if (sender instanceof Player player) {
