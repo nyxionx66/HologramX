@@ -77,6 +77,7 @@ public class Hologram {
     
     private void spawnTextDisplay() {
         Location spawnLoc = location.clone();
+        double currentYOffset = 0.0;
         
         for (int i = 0; i < textLines.size(); i++) {
             TextDisplay display = location.getWorld().spawn(spawnLoc, TextDisplay.class);
@@ -93,13 +94,19 @@ public class Hologram {
             // Apply display settings with per-line scaling
             applyDisplaySettings(display, i);
             
-            // Set position with responsive line spacing based on scaling
-            double baseLineSpacing = 0.25;
-            double scaledSpacing = baseLineSpacing * Math.max(scaleY, getLineScaleY(i));
-            
+            // Calculate responsive position based on actual line scaling
             Location lineLocation = spawnLoc.clone();
-            lineLocation.add(0, -i * scaledSpacing, 0);
+            lineLocation.add(0, currentYOffset, 0);
             display.teleport(lineLocation);
+            
+            // Calculate spacing for next line based on current line's actual scale
+            double baseLineSpacing = 0.25;
+            double currentLineScale = Math.max(scaleY * getLineScaleY(i), 0.1); // Minimum scale to prevent zero spacing
+            double lineHeight = baseLineSpacing * currentLineScale;
+            
+            // Add additional padding for larger scaled lines to prevent overlap
+            double paddingFactor = currentLineScale > 1.0 ? currentLineScale * 0.1 : 0.05;
+            currentYOffset -= (lineHeight + paddingFactor);
             
             displayEntities.add(display);
         }
