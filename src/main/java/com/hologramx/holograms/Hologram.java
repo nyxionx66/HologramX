@@ -96,19 +96,13 @@ public class Hologram {
             // Apply display settings with per-line scaling
             applyDisplaySettings(display, i);
             
-            // Calculate responsive position based on actual line scaling
+            // Set position with simple line spacing
             Location lineLocation = spawnLoc.clone();
             lineLocation.add(0, currentYOffset, 0);
             display.teleport(lineLocation);
             
-            // Calculate spacing for next line based on current line's actual scale
-            double baseLineSpacing = 0.25;
-            double currentLineScale = Math.max(scaleY * getLineScaleY(i), 0.1); // Minimum scale to prevent zero spacing
-            double lineHeight = baseLineSpacing * currentLineScale;
-            
-            // Add additional padding for larger scaled lines to prevent overlap
-            double paddingFactor = currentLineScale > 1.0 ? currentLineScale * 0.1 : 0.05;
-            currentYOffset -= (lineHeight + paddingFactor);
+            // Simple line spacing calculation - just use the line spacing property
+            currentYOffset -= lineSpacing;
             
             displayEntities.add(display);
         }
