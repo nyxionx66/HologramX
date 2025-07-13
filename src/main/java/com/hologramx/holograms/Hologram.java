@@ -62,6 +62,7 @@ public class Hologram {
         this.updateTextInterval = -1;
         this.background = "transparent";
         this.billboard = BillboardType.VERTICAL;
+        this.lineSpacing = 0.25; // Default line spacing
     }
     
     public void spawn() {
