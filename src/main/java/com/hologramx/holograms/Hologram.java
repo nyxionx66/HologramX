@@ -34,6 +34,7 @@ public class Hologram {
     private int updateTextInterval;
     private String background;
     private BillboardType billboard;
+    private double lineSpacing; // Custom line spacing
     
     // Runtime data
     private final Set<UUID> viewers = new HashSet<>();
