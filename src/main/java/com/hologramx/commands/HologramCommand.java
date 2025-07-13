@@ -1536,11 +1536,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             String subCommand = args[0].toLowerCase();
             
             // Commands that need hologram names
-            if (Arrays.asList("delete", "info", "toggle", "clone", "tp", "edit", "movehere", "position", 
-                "moveto", "rotate", "rotatepitch", "visibilitydistance", "visibility", "scale", 
-                "billboard", "shadowstrength", "shadowradius", "setline", "addline", "removeline", 
-                "insertbefore", "insertafter", "updatetextinterval", "background", "textshadow", 
-                "textalignment", "linescale", "linescalex", "linescaley", "linescalez").contains(subCommand)) {
+            if (Arrays.asList("delete", "info", "toggle", "clone", "tp", "edit").contains(subCommand)) {
                 return plugin.getHologramManager().getHolograms().stream()
                     .map(Hologram::getId)
                     .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
