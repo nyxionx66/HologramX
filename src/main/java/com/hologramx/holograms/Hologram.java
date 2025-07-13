@@ -295,6 +295,11 @@ public class Hologram {
     public void setLineScale(int lineIndex, float scaleX, float scaleY, float scaleZ) {
         ensureLineScaleSize(lineIndex + 1);
         if (lineIndex >= 0) {
+            // Validate scale values to prevent extreme distortions
+            scaleX = Math.max(0.1f, Math.min(10.0f, scaleX));
+            scaleY = Math.max(0.1f, Math.min(10.0f, scaleY));
+            scaleZ = Math.max(0.1f, Math.min(10.0f, scaleZ));
+            
             lineScaleX.set(lineIndex, scaleX);
             lineScaleY.set(lineIndex, scaleY);
             lineScaleZ.set(lineIndex, scaleZ);
@@ -302,6 +307,8 @@ public class Hologram {
     }
     
     public void setLineScaleUniform(int lineIndex, float scale) {
+        // Validate scale value
+        scale = Math.max(0.1f, Math.min(10.0f, scale));
         setLineScale(lineIndex, scale, scale, scale);
     }
     
