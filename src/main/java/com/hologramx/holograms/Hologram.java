@@ -411,6 +411,8 @@ public class Hologram {
     public void setBackground(String background) { this.background = background; }
     public BillboardType getBillboard() { return billboard; }
     public void setBillboard(BillboardType billboard) { this.billboard = billboard; }
+    public double getLineSpacing() { return lineSpacing; }
+    public void setLineSpacing(double lineSpacing) { this.lineSpacing = Math.max(0.1, Math.min(2.0, lineSpacing)); }
     public boolean isLoaded() { return loaded; }
     public Set<UUID> getViewers() { return viewers; }
     public List<TextDisplay> getDisplayEntities() { return displayEntities; }
