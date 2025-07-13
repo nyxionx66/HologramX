@@ -1478,14 +1478,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         
         sender.sendMessage("§e§lEdit Command:");
         sender.sendMessage("§e/hx edit <name> <property> [args...] §7- Edit hologram properties");
-        sender.sendMessage("§7Use '/hx edit' for detailed edit commands");
-        
-        sender.sendMessage("§e§lDirect Commands (Legacy):");
-        sender.sendMessage("§e/hx moveHere <name> §7- Move to your location");
-        sender.sendMessage("§e/hx moveTo <name> <x> <y> <z> [yaw] [pitch] §7- Set exact position");
-        sender.sendMessage("§e/hx scale <name> <factor> §7- Resize hologram");
-        sender.sendMessage("§e/hx addLine <name> <text...> §7- Add text line");
-        sender.sendMessage("§7And more... Use '/hx edit' for organized editing");
+        sender.sendMessage("§7Use '/hx edit' without arguments for detailed edit commands");
     }
     
     @Override
