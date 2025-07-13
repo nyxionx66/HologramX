@@ -1008,8 +1008,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
         String text = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
         hologram.addTextLine(text);
         
-        hologram.despawn();
-        hologram.spawn();
+        hologram.refresh();
         
         plugin.getMessages().sendMessage(player, "text-line-added", "name", name);
     }
