@@ -311,8 +311,7 @@ public class HologramCommand implements CommandExecutor, TabCompleter {
             case "cleartext" -> {
                 if (hologram.getType() == Hologram.HologramType.TEXT) {
                     hologram.clearTextLines();
-                    hologram.despawn();
-                    hologram.spawn();
+                    hologram.refresh();
                     player.sendMessage("§aCleared all text lines for hologram '" + hologramName + "'.");
                 } else {
                     player.sendMessage("§cThis command only works with text holograms!");
