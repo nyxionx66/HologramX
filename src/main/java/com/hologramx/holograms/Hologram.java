@@ -318,11 +318,19 @@ public class Hologram {
         ensureLineScaleSize(textLines.size());
     }
     
+    public void setTextLine(int index, String text) {
+        if (index >= 0 && index < textLines.size()) {
+            textLines.set(index, text);
+        }
+    }
+    
     public void insertTextLine(int index, String text) {
-        textLines.add(index, text);
-        lineScaleX.add(index, 1.0f);
-        lineScaleY.add(index, 1.0f);
-        lineScaleZ.add(index, 1.0f);
+        if (index >= 0 && index <= textLines.size()) {
+            textLines.add(index, text);
+            lineScaleX.add(index, 1.0f);
+            lineScaleY.add(index, 1.0f);
+            lineScaleZ.add(index, 1.0f);
+        }
     }
     
     public void removeTextLine(int index) {
@@ -341,6 +349,16 @@ public class Hologram {
         lineScaleX.clear();
         lineScaleY.clear();
         lineScaleZ.clear();
+    }
+    
+    /**
+     * Refreshes the hologram display after changes to text or scaling
+     */
+    public void refresh() {
+        if (loaded) {
+            despawn();
+            spawn();
+        }
     }
     public String getId() { return id; }
     public HologramType getType() { return type; }
